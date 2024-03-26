@@ -1,5 +1,7 @@
 // src/user/user.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Todo } from 'src/modules/todo/entities/todo.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -9,6 +11,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column()
   password: string;
 
@@ -18,7 +21,11 @@ export class User {
   @Column({ nullable: true })
   firstName: string;
 
+  @OneToMany(() => Todo, todo => todo.user)
+  todos: Todo[];
+
   constructor(user: Partial<User>) {
     Object.assign(this, user);
   }
+
 }

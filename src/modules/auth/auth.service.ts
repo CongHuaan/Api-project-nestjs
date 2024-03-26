@@ -5,6 +5,7 @@ import { AuthDto } from './auth.dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { request } from 'http';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
   ) {}
 
   async signIn(dto: AuthDto) {
+    console.log(dto);
     const userRepository = this.dataSource.getRepository(User);
     const user = await userRepository.findOneBy({ email: dto.email });
 
@@ -27,7 +29,9 @@ export class AuthService {
     if (!pwMatch) {
       throw new ForbiddenException('Credentials incorrect');
     }
-
+    console.log({
+      dto,
+    })
     return this.signInToken(user.id, user.email);
   }
 
@@ -49,7 +53,9 @@ export class AuthService {
       password: hash,
     });
     await userRepository.save(newUser);
-
+    console.log({
+      newUser,
+    })
     return this.signInToken(newUser.id, newUser.email);
   }
 

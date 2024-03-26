@@ -1,13 +1,22 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthGuard } from '../auth/guard/auth.guard';
+import { GetUser } from './decorator/get-user.decorator';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UserController {
   @UseGuards(AuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
-  getMe() {
+  getMe(@GetUser('') user: User) {
     return {
-      msg: `It's me <3`,
+      user,
     };
   }
 }
