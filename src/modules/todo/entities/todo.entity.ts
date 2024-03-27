@@ -17,5 +17,4 @@ export class Todo {
 
   @ManyToOne(() => User, (user: User) => user.todos)
   user: User;
-  
 }

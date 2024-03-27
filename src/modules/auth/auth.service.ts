@@ -1,24 +1,23 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
-import { User } from '../user/entities/user.entity'; // Giả sử user entity đã được định nghĩa
+import { Repository } from 'typeorm';
+import { User } from '../user/entities/user.entity';
 import { AuthDto } from './auth.dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { request } from 'http';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private dataSource: DataSource,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private config: ConfigService,
     private jwt: JwtService,
   ) {}
 
   async signIn(dto: AuthDto) {
-    console.log(dto);
-    const userRepository = this.dataSource.getRepository(User);
-    const user = await userRepository.findOneBy({ email: dto.email });
+    const user = await this.userRepository.findOneBy({ email: dto.email });
 
     if (!user) {
       throw new ForbiddenException('Credentials incorrect');
@@ -31,13 +30,12 @@ export class AuthService {
     }
     console.log({
       dto,
-    })
+    });
     return this.signInToken(user.id, user.email);
   }
 
   async signUp(dto: AuthDto) {
-    const userRepository = this.dataSource.getRepository(User);
-    const existingUser = await userRepository.findOne({
+    const existingUser = await this.userRepository.findOne({
       where: {
         email: dto.email,
       },
@@ -48,14 +46,14 @@ export class AuthService {
     }
 
     const hash = await argon.hash(dto.password);
-    const newUser = userRepository.create({
+    const newUser = this.userRepository.create({
       email: dto.email,
       password: hash,
     });
-    await userRepository.save(newUser);
+    await this.userRepository.save(newUser);
     console.log({
       newUser,
-    })
+    });
     return this.signInToken(newUser.id, newUser.email);
   }
 
