@@ -5,9 +5,9 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { AuthGuard } from '../auth/guard/auth.guard';
-import { GetUser } from './decorator/get-user.decorator';
-import { User } from './entities/user.entity';
+import { AuthGuard } from '@guard/auth.guard';
+import { GetUser } from '@decorator/get-user.decorator';
+import { User } from '@entity/user.entity';
 
 @Controller('users')
 export class UserController {
