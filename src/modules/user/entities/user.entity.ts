@@ -1,6 +1,6 @@
 // src/user/user.entity.ts
 import { Exclude } from 'class-transformer';
-import { Todo } from 'src/modules/todo/entities/todo.entity';
+import { Todo } from '@entity/todo.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()

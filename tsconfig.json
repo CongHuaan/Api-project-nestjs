@@ -20,7 +20,7 @@
     "paths": {
       "@entity/todo.entity": ["src/modules/todo/entities/todo.entity"],
       "@entity/user.entity": ["src/modules/user/entities/user.entity"],
-      "@dto/auth.dto": ["src/modules/auth/dto/auth.dto"],
+      "@dto/auth.dto": ["src/modules/auth/auth.dto"],
 
       "@controller/auth.controller": ["src/modules/auth/auth.controller"],
       "@controller/user.controller": ["src/modules/user/user.controller"],
@@ -34,7 +34,7 @@
       "@module/user.module": ["src/modules/user/user.module"],
       "@module/todo.module": ["src/modules/todo/todo.module"],
       "@module/database.module": ["src/base/database/database.module"],
-      "@module/app.module": ["app.module"],
+      "@module/app.module": ["src/app.module"],
       "@guard/auth.guard": ["src/modules/auth/guard/auth.guard"],
       "@decorator/get-user.decorator": ["src/modules/user/decorator/get-user.decorator"]
     }
