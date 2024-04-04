@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from '@entity/user.entity';
-import { AuthDto } from '@dto/auth.dto';
+import { User } from '@modules/user/entities/user.entity';
+import { AuthDto } from '@modules/auth/auth.dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';

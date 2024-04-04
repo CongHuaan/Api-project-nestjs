@@ -7,7 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
-import { User } from '@entity/user.entity';
+import { User } from '@modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

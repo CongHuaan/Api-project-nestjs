@@ -1,10 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { AuthDto } from '@dto/auth.dto';
-import { AuthService } from '@service/auth.service';
+import { AuthDto } from '@modules/auth/auth.dto';
+import { AuthService } from '@modules/auth/auth.service';
+import { MailerProducer } from 'src/queue/producers/mailer.producer';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private readonly mailerProducer: MailerProducer) {}
 
   @Post('signin')
   signIn(@Body() dto: AuthDto) {
@@ -12,7 +13,8 @@ export class AuthController {
   }
 
   @Post('signup')
-  signUp(@Body() dto: AuthDto) {
+  async signUp(@Body() dto: AuthDto) {
+    await this.mailerProducer.resMail(dto.email);
     return this.authService.signUp(dto);
   }
 }

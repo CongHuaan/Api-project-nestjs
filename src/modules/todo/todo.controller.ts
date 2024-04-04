@@ -11,11 +11,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 
-import { TodoService } from '@service/todo.service';
+import { TodoService } from '@modules/todo/todo.service';
 import { AuthGuard } from '@guard/auth.guard';
 import { GetUser } from '@decorator/get-user.decorator';
-import { User } from '@entity/user.entity';
-import { Todo } from '@entity/todo.entity';
+import { User } from '@modules/user/entities/user.entity';
+import { Todo } from '@modules/todo/entities/todo.entity';
 
 @UseGuards(AuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
