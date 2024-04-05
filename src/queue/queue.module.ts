@@ -1,6 +1,7 @@
 import { BullModule } from '@nestjs/bull';
 import { Global, Module } from '@nestjs/common';
 import { MailerProducer } from './producers/mailer.producer';
+import { MailerConsumer } from './consumers/mailer.consumer';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { MailerProducer } from './producers/mailer.producer';
       name: 'mailer-queue',
     }),
   ],
-  providers: [MailerProducer],
+  providers: [MailerProducer, MailerConsumer],
   exports: [MailerProducer],
 })
 export class QueueModule {}

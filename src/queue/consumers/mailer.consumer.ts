@@ -41,11 +41,8 @@ export class MailerConsumer {
     }
   }
 
-  @Process('res-mail')
-  async resMail(job: Job<any>) {
-    const { data } = job;
-    console.log(data);
-    
+  @Process('daily-mail')
+  async dailyMail() {
     try {
       // Tạo transporter cho Gmail
       const transporter = nodemailer.createTransport({
@@ -59,15 +56,15 @@ export class MailerConsumer {
 
       // Tạo options cho email
       const mailOptions = {
-        from: 'abcxcsa123123@gmail.com',
-        to: data,
-        subject: 'Register',
-        text: 'Ban da dang ky thanh cong',
+        from: 'anhhuaan@gmail.com',
+        to: 'duc@gmail.com',
+        subject: 'Daily Report',
+        text: 'This is a daily report email.',
       };
 
       // Gửi email
       await transporter.sendMail(mailOptions);
-      console.log(`Email sent to ${data.to}`);
+      console.log(`Email sent to duc@gmail.com`);
     } catch (error) {
       console.error('Error sending email:', error);
     }

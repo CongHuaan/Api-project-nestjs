@@ -5,8 +5,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@modules/user/entities/user.entity';
 import { MailerProducer } from 'src/queue/producers/mailer.producer';
-import { QueueModule } from 'src/queue/queue.module';
 import { BullModule } from '@nestjs/bull';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -21,6 +21,7 @@ import { BullModule } from '@nestjs/bull';
     BullModule.registerQueue({
       name: 'mailer-queue',
     }),
+    CacheModule.register(),
   ],
   controllers: [AuthController],
   providers: [AuthService, MailerProducer],

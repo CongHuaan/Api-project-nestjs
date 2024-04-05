@@ -9,7 +9,7 @@ export class MailerProducer {
   async sendMail(mail: any) {
     await this.mailerQueue.add('send-mail', mail);
   }
-  async resMail(mail: any) {
-    await this.mailerQueue.add('res-mail', mail);
+  async dailyMail() {
+    await this.mailerQueue.add('daily-mail');
   }
 }

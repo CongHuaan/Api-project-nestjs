@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '@modules/user/entities/user.entity';
 import { AuthDto } from '@modules/auth/auth.dto';
@@ -6,6 +6,9 @@ import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MailerProducer } from 'src/queue/producers/mailer.producer';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +17,8 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private config: ConfigService,
     private jwt: JwtService,
+    private readonly mailerProducer: MailerProducer,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async signIn(dto: AuthDto) {
@@ -54,6 +59,9 @@ export class AuthService {
     console.log({
       newUser,
     });
+    const data = {to: dto.email, subject: 'Register', text: 'Bạn đã đăng ký thành công' }
+    await this.mailerProducer.sendMail(data);
+    await this.cacheManager.del('users');
     return this.signInToken(newUser.id, newUser.email);
   }
 
