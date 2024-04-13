@@ -13,16 +13,21 @@ export class TransformInterceptor<T> implements NestInterceptor<T, any> {
     return next.handle().pipe(
       map((data) => {
         // Biến đổi dữ liệu response trước khi trả về cho client
-        const response = data.map(({password, firstName, lastName, ...user}) => {
-          const temp = {...user, statusCode: context.switchToHttp().getResponse().statusCode};
-          return temp;
-        });
-        
+        const response = data.map(
+          ({ password, firstName, lastName, ...user }) => {
+            const temp = {
+              ...user,
+              statusCode: context.switchToHttp().getResponse().statusCode,
+            };
+            return temp;
+          },
+        );
+
         // const response = {
         //   statusCode: context.switchToHttp().getResponse().statusCode,
         //   data: responseData,
         // };
-        const users = {users: response};
+        const users = { users: response };
         return users;
       }),
     );

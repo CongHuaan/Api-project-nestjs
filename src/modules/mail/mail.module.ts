@@ -13,14 +13,12 @@ import { User } from '@modules/user/entities/user.entity';
 
 @Module({
   imports: [
-    ConfigModule, TypeOrmModule.forFeature([User]), AuthModule,
+    ConfigModule,
+    TypeOrmModule.forFeature([User]),
+    AuthModule,
     BullModule.registerQueue({ name: 'mailer-queue' }),
   ],
-  providers: [
-    MailerProducer,
-    EmailService,
-    CronService,
-  ],
+  providers: [MailerProducer, EmailService, CronService, AuthGuard],
   controllers: [EmailController],
 })
 export class MailModule {}

@@ -21,11 +21,10 @@ export class User {
   @Column({ nullable: true })
   firstName: string;
 
-  @OneToMany(() => Todo, todo => todo.user)
+  @OneToMany(() => Todo, (todo) => todo.user)
   todos: Todo[];
 
   constructor(user: Partial<User>) {
     Object.assign(this, user);
   }
-
 }

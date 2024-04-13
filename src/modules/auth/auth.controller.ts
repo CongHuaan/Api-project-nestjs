@@ -8,8 +8,7 @@ import { Subject } from 'rxjs';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService, 
-) {}
+  constructor(private authService: AuthService) {}
 
   @Post('signin')
   signIn(@Body() dto: AuthDto) {

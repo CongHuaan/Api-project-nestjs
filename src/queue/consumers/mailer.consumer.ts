@@ -1,40 +1,27 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 @Processor('mailer-queue')
 export class MailerConsumer {
-  constructor(private config: ConfigService) {}
+  constructor(
+    private config: ConfigService,
+    private mailService: MailerService,
+  ) {}
 
   @Process('send-mail')
   async sendMail(job: Job<any>) {
     const { data } = job;
     console.log(data);
-    
     try {
-      // Tạo transporter cho Gmail
-      const transporter = nodemailer.createTransport({
-        host: this.config.get('SMTP_HOST'),
-        port: parseInt(this.config.get('SMTP_PORT')),
-        auth: {
-          user: this.config.get('SMTP_USER'),
-          pass: this.config.get('SMTP_PASS'),
-        },
-      });
-
-      // Tạo options cho email
-      const mailOptions = {
-        from: 'abcxcsa123123@gmail.com',
+      await this.mailService.sendMail({
         to: data.to,
         subject: data.subject,
-        text: data.text,
-      };
-
-      // Gửi email
-      await transporter.sendMail(mailOptions);
+        html: data.body,
+      });
       console.log(`Email sent to ${data.to} with subject ${data.subject}`);
     } catch (error) {
       console.error('Error sending email:', error);
@@ -44,27 +31,13 @@ export class MailerConsumer {
   @Process('daily-mail')
   async dailyMail() {
     try {
-      // Tạo transporter cho Gmail
-      const transporter = nodemailer.createTransport({
-        host: this.config.get('SMTP_HOST'),
-        port: parseInt(this.config.get('SMTP_PORT')),
-        auth: {
-          user: this.config.get('SMTP_USER'),
-          pass: this.config.get('SMTP_PASS'),
-        },
+      await this.mailService.sendMail({
+        from: this.config.get('AUTHER_MAIL'),
+        to: this.config.get('CL_EMAIL'),
+        subject: this.config.get('DR'),
+        text: this.config.get('DR_DATA'),
       });
-
-      // Tạo options cho email
-      const mailOptions = {
-        from: 'anhhuaan@gmail.com',
-        to: 'duc@gmail.com',
-        subject: 'Daily Report',
-        text: 'This is a daily report email.',
-      };
-
-      // Gửi email
-      await transporter.sendMail(mailOptions);
-      console.log(`Email sent to duc@gmail.com`);
+      console.log(`Email sent to ${this.config.get('CL_EMAIL')}`);
     } catch (error) {
       console.error('Error sending email:', error);
     }

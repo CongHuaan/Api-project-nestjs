@@ -9,19 +9,19 @@ import { Cache } from 'cache-manager';
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache, 
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async findAll(): Promise<User[]> {
     const cachedUser = await this.cacheManager.get<User[]>('users');
     console.log(cachedUser);
-    if(cachedUser) {
+    if (cachedUser) {
       console.log('Data from Cache!');
       return cachedUser;
     }
     console.log('Database');
     const users = await this.userRepository.find();
-    await this.cacheManager.set('users', users , 0);
+    await this.cacheManager.set('users', users, 0);
     return users;
   }
 }

@@ -11,7 +11,12 @@ import { GetUser } from '@decorator/get-user.decorator';
 import { User } from '@modules/user/entities/user.entity';
 import { TransformInterceptor } from '@modules/user/interceptors/transform.interceptor';
 import { UserService } from '@modules/user/user.service';
-import { CacheInterceptor, CacheKey, CACHE_MANAGER, CacheTTL } from '@nestjs/cache-manager';
+import {
+  CacheInterceptor,
+  CacheKey,
+  CACHE_MANAGER,
+  CacheTTL,
+} from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
 @Controller('users')
@@ -19,7 +24,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    ) { }
+  ) {}
 
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
@@ -35,6 +40,4 @@ export class UserController {
   async findAll(): Promise<any> {
     return this.userService.findAll();
   }
-
-
 }

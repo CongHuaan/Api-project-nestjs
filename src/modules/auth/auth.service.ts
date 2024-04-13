@@ -59,7 +59,11 @@ export class AuthService {
     console.log({
       newUser,
     });
-    const data = {to: dto.email, subject: 'Register', text: 'Bạn đã đăng ký thành công' }
+    const data = {
+      to: dto.email,
+      subject: 'Register',
+      text: 'Bạn đã đăng ký thành công',
+    };
     await this.mailerProducer.sendMail(data);
     await this.cacheManager.del('users');
     return this.signInToken(newUser.id, newUser.email);
