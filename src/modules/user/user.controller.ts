@@ -18,7 +18,10 @@ import {
   CacheTTL,
 } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+
+@ApiBearerAuth()
 @Controller('users')
 export class UserController {
   constructor(
@@ -26,7 +29,7 @@ export class UserController {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  @UseGuards(AuthGuard)
+  
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
   getMe(@GetUser('') user: User) {

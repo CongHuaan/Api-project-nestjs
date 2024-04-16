@@ -12,18 +12,22 @@ import {
 } from '@nestjs/common';
 
 import { TodoService } from '@modules/todo/todo.service';
-import { AuthGuard } from '@guard/auth.guard';
 import { GetUser } from '@decorator/get-user.decorator';
 import { User } from '@modules/user/entities/user.entity';
 import { Todo } from '@modules/todo/entities/todo.entity';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { TodosInterceptor } from './interceptors/todo.interceptor';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
-@UseGuards(AuthGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('todos')
 export class TodoController {
   constructor(private todoService: TodoService) {}
 
+  
   @Get()
+  @UseInterceptors(CacheInterceptor, TodosInterceptor)
   async findAll(@GetUser() user: User) {
     return this.todoService.findAll(user.id);
   }
